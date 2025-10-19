@@ -5,4 +5,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#define DEUBUG_TRACE_EXECUTION
+
 #endif
