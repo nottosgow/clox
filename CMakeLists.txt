@@ -12,6 +12,8 @@ set(SRC_FILES
         ~/projects/clox/src/value.c
         ~/projects/clox/src/memory.c
         ~/projects/clox/src/vm.c
+        ~/projects/clox/src/compiler.c
+        ~/projects/clox/src/scanner.c
 
 )
 

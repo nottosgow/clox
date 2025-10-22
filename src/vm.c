@@ -1,5 +1,6 @@
 #include "chunk.h"
 #include "common.h"
+#include "compiler.h"
 #include "debug.h"
 #include "value.h"
 #include "vm.h"
@@ -63,7 +64,18 @@ static InterpretResult run() {
             case OP_SUBTRACT : BINARY_OP(-); break;
             case OP_MULTIPLY : BINARY_OP(*); break;
             case OP_DIVIDE : BINARY_OP(/); break;
-            case OP_NEGATE: push(-pop()); break;
+            // case OP_NEGATE: push(-pop()); break;
+            case OP_NEGATE: {
+                if (vm.stackTop == vm.stack) {
+                    printf("Stack underflow.\n");
+                    break;
+                }
+                Value tmp = *(vm.stackTop - 1);
+                printf("in the OP_NEGATE case\n");
+                printValue(tmp);
+                tmp = tmp * -1;
+                *(vm.stackTop - 1) = tmp;
+            }
             case OP_CONSTANT: {
                 Value constant = READ_CONSTANT();
                 push(constant);
@@ -76,9 +88,8 @@ static InterpretResult run() {
     #undef BINARY_OP
 }
 
-InterpretResult interpret(Chunk *chunk) {
-    vm.chunk = chunk;
-    vm.ip = vm.chunk->code;
-    return run();
+InterpretResult interpret(const char* source) {
+    compile(source);
+    return INTERPRET_OK;
 }
 
